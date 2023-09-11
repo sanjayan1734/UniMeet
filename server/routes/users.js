@@ -1,16 +1,15 @@
 var express = require('express');
 var mysql = require('mysql')
-
 var router = express.Router();
 var db = require('../db/conn')
 /* GET users listing. */
+
 router.get('/', function(req, res, next) {
   res.send('User management page!!');
 });
 
 // login route
 router.get('/authenticate/:userid/:password', function(req, res, next) {
-
   var userMailId = req.params.userid
   var userPassword = req.params.password
   
@@ -51,10 +50,6 @@ router.get('/authenticate/:userid/:password', function(req, res, next) {
       })
     }
 })
-
-
-
-
 })
 
 // registration route
