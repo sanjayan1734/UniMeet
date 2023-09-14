@@ -16,11 +16,6 @@ export default function LoginPage() {
     var [Password, setPassword] = useState('')
     const [error, setError] = useState("");
 
-    const createTwoButtonAlert = () =>
-    Alert.alert('Invalid Credentials', 'Wrong Username or Password', [
-      {text: 'OK'},
-    ]);
-
     function authenticateUser() {
         console.log('http://192.168.25.83:5000/users/authenticate/' + userid + '/' + Password)
 
@@ -65,7 +60,7 @@ export default function LoginPage() {
                             <View style={styles.signupContainer}>
                                 <Text style={styles.text}>Don't have an account?</Text>
                             </View>
-                                <TouchableOpacity onPress={navigation.navigate('SignUp')}>
+                                <TouchableOpacity onPress={() => navigation.navigate('SignUp')}>
                                     <View style={[styles.buttonstyle, styles.signupButton]} >
                                         <Text style={[styles.textstyle, styles.signupText]} >
                                             Signup

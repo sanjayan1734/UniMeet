@@ -4,7 +4,12 @@ var path = require('path');
 var cookieParser = require('cookie-parser');
 var logger = require('morgan');
 var cors = require('cors')
+var bodyParser = require('body-parser')
+
 const ngrok = require('ngrok');
+const morgan = require('morgan');
+const helmet = require('helmet');
+
 
 var indexRouter = require('./routes/index');
 var usersRouter = require('./routes/users');
@@ -19,8 +24,14 @@ app.use(express.json());
 app.use(express.urlencoded({ extended: false }));
 app.use(cookieParser());
 app.use(express.static(path.join(__dirname, 'public')));
-app.use(cors()
-);
+app.use(cors());
+app.use(helmet());
+app.use(morgan('common'));
+app.use(bodyParser.json())
+
+app.use(express.urlencoded({extended: true}));
+app.use(express.json());
+
 app.use('/', indexRouter);
 app.use('/users', usersRouter);
 

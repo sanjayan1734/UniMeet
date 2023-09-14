@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, TextInput, TouchableOpacity, StyleSheet } from "react-native";
 import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
+
 
 export default function SignUpPage() {
   const navigation = useNavigation();
@@ -11,11 +13,37 @@ export default function SignUpPage() {
   const [error, setError] = useState("");
 
   const handleSignUp = () => {
+    let data = JSON.stringify({
+      'userid': userId,
+      'password': password,
+      'firstname': firstName,
+      'lastname': lastName 
+    });
     if (!userId || !password || !firstName || !lastName) {
       setError("All fields are required");
     } else {
-      navigation.navigate('Home')
-      // Handle sign up logic
+      axios({
+          method: 'post',
+          maxBodyLength: Infinity,
+          url: 'http://192.168.25.83:5000/users/register',
+          headers: { 
+            'Content-Type': 'application/json'
+          },
+          data : data
+      }).then (
+        (res)=>{
+          if (res['data']['response'] == "registration successful"){
+            navigation.navigate('Home')
+          }
+          else {
+            // createTwoButtonAlert()
+            setError("Error registering user try again")
+          }
+        },
+        (err) => {
+          console.log(err)
+        }
+      )
     }
   };
 

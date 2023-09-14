@@ -4,6 +4,7 @@ import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-cont
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
+
 import SignUpPage from './Pages/SignUp'
 import LoginPage from './Pages/Login';
 import EventListingPage from './Pages/Home';
