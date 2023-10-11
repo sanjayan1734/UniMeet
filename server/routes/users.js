@@ -3,10 +3,8 @@ var mysql = require('mysql')
 var router = express.Router();
 var db = require('../db/conn')
 var bodyParser = require('body-parser')
-var jwt  = require('jsonwebtoken')
 /* GET users listing. */
 
-const serverSecretToken = "thisisthesecretettokenfortheexpressserver"
 
 router.get('/', function(req, res, next) {
   res.send('User management page!!');
@@ -35,12 +33,6 @@ router.get('/authenticate/', function(req, res, next) {
     // validate username and password
 
     else if (existingUser['password'] == data[0]['password']){
-      const accesstoken = jwt.sign({userid: data[0]['userid'], firstname: data[0]['firstname'], lastname: data[0]['lastname']}, serverSecretToken)
-      query = `UPDATE USERS SET SESSIONKEY = "${accesstoken}" WHERE USERID = "${existingUser['userid']}"`
-      
-      db.query(query, function(err, rawData, fields) {
-        if (err) throw err;
-      })
       res.json({
         status:200,
         response:"authentication successful",
@@ -48,8 +40,7 @@ router.get('/authenticate/', function(req, res, next) {
           userid:data[0]['userid'],
           firstname:data[0]['firstname'],
           lastname:data[0]['lastname']
-        },
-        sessionkey:accesstoken
+        }
       })
     }
     // invalid password
