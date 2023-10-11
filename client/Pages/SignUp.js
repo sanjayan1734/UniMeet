@@ -25,7 +25,7 @@ export default function SignUpPage() {
       axios({
           method: 'post',
           maxBodyLength: Infinity,
-          url: 'http://192.168.25.83:5000/users/register',
+          url: 'http://192.168.146.83:5000/users/register',
           headers: { 
             'Content-Type': 'application/json'
           },

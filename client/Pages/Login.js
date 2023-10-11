@@ -6,7 +6,7 @@ import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import SignUpPage from "./SignUp";
-
+import * as keychain from 'react-native-keychain';
 
 
 export default function LoginPage() {
@@ -16,11 +16,26 @@ export default function LoginPage() {
     var [Password, setPassword] = useState('')
     const [error, setError] = useState("");
 
-    function authenticateUser() {
+    const authenticateUser = () => {
         console.log('http://192.168.25.83:5000/users/authenticate/' + userid + '/' + Password)
 
-        axios.get(`http://192.168.25.83:5000/users/authenticate/${userid}/${Password}`,).then(
+        let body = JSON.stringify({
+            'userid': userid,
+            'password': Password,
+        });
+        console.log(body)
+
+        axios({
+            method: 'get',
+            maxBodyLength: Infinity,
+            url: 'http://192.168.146.83:5000/users/authenticate/',
+            headers: { 
+              'Content-Type': 'application/json'
+            },
+            data : body
+        }).then(
             (res)=>{
+                console.log(res['data'])
                 if (res['data']['response'] == "authentication successful"){
                     navigation.navigate('Home')
                 }
@@ -50,7 +65,7 @@ export default function LoginPage() {
                             <Text style={styles.text}>Password</Text>
                             <TextInput placeholder="Password" style={[styles.textinput, { color: "#00000080" }]} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
                             <Text style={[{color: "red"} ]}>{error}</Text>
-                            <TouchableOpacity onPress={() =>authenticateUser()}>
+                            <TouchableOpacity onPress={authenticateUser}>
                                 <View style={styles.buttonstyle}>
                                     <Text style={styles.textstyle}>
                                         Login

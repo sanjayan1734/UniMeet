@@ -15,16 +15,17 @@ router.get('/', function(req, res, next) {
 // login route
 router.get('/authenticate/', function(req, res, next) {
   var existingUser = req.body
-  
+  console.log(req.body)
   sqlQuery = `select * from users where userid = "${existingUser['userid']}"`
   
   db.query(sqlQuery, function(err, rawData, fields) {
     if (err) throw err;
     //preprocess data into string
     var data = JSON.parse(JSON.stringify(rawData))
-    
     // check fo empty string and non existant username
+    console.log(data)
     if (data.length == 0) {
+     
       res.json({
         status:200,
         response:"User not found",
@@ -32,6 +33,7 @@ router.get('/authenticate/', function(req, res, next) {
       })
     }
     // validate username and password
+
     else if (existingUser['password'] == data[0]['password']){
       const accesstoken = jwt.sign({userid: data[0]['userid'], firstname: data[0]['firstname'], lastname: data[0]['lastname']}, serverSecretToken)
       query = `UPDATE USERS SET SESSIONKEY = "${accesstoken}" WHERE USERID = "${existingUser['userid']}"`
