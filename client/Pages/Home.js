@@ -1,20 +1,38 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "react-native";
+import { useNavigation } from '@react-navigation/native';
+import axios from "axios";
+
 
 const EventListingPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const navigation = useNavigation();
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
+  const fetchEvents= () => {
+    axios({
+      method: 'get',
+      maxBodyLength: Infinity,
+      url: 'http://192.168.146.83:5000/events/getAllEvents'
+    }).then (
+      (res)=>{
+        console.log(res)
+        setUpcomingEvents(res['data']['events'])
+        console.log(upcomingEvents)
+      },
+      (err) => {
+        console.log(err)
+      }
+    )
+  }
+  useEffect(() => {
+    fetchEvents()
+  }, []);
 
-  const upcomingEvents = [
-    { id: "1", name: "Conference 2023", date: "September 20, 2023", location: "Amriteshwari Hall" },
-    { id: "2", name: "Seminar Series", date: "October 5, 2023", location: "Pandhal" },
-    { id: "3", name: "Tech Expo", date: "November 12, 2023", location: "Library" },
-    { id: "4", name: "Fitness Workshop", date: "December 3, 2023", location: "Physical Department" },
-    { id: "5", name: "Concert", date: "January 8, 2024", location: "Main Ground" },
-  ];
+ 
 
   const ongoingEvents = [
     { id: "6", name: "Workshop Series", date: "Ongoing", location: "Anugraha Hall" },
@@ -30,21 +48,22 @@ const EventListingPage = () => {
         <Text style={styles.appName}>UniMeet</Text>
         <View style={styles.spacer} />
         <View style={styles.loginIcon}>
-          <Text style={styles.profileInitial}>P</Text>
+          <Text style={styles.profileInitial}>Q</Text>
         </View>
       </View>
       {menuVisible && (
         <View style={styles.menu}>
+          <Text style={styles.menuItem} onPress={()=>navigation.navigate('Home')}>Home</Text>
           <Text style={styles.menuItem}>Registered Events</Text>
           <Text style={styles.menuItem}>Notifications</Text>
-          <Text style={styles.menuItem}>Calendar</Text>
+          <Text style={styles.menuItem} onPress={()=>navigation.navigate('calendar')}>Calendar</Text>
         </View>
       )}
       <Text style={styles.eventsHeader}>Upcoming Events</Text>
       {upcomingEvents.map(item => (
-        <View style={styles.eventItem} key={item.id}>
-          <Text style={styles.eventName}>{item.name}</Text>
-          <Text style={styles.eventDetails}>{item.date} | {item.location}</Text>
+        <View style={styles.eventItem} key={item.event_id} onPress = {() =>navigation.navigate('event', {event_id: 1})}>
+          <Text style={styles.eventName} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_name}</Text>
+          <Text style={styles.eventDetails}>{item.event_date} | {item.event_venue}</Text>
         </View>
       ))}
       <Text style={styles.eventsHeader}>Ongoing Events</Text>

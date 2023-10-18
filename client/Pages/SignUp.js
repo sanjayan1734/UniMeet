@@ -19,6 +19,7 @@ export default function SignUpPage() {
       'firstname': firstName,
       'lastname': lastName 
     });
+    console.log(data)
     if (!userId || !password || !firstName || !lastName) {
       setError("All fields are required");
     } else {

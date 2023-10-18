@@ -13,41 +13,43 @@ export default function LoginPage() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
     var [userid, setUserId] = useState('')
-    var [Password, setPassword] = useState('')
+    var [password, setpassword] = useState('')
     const [error, setError] = useState("");
 
     const authenticateUser = () => {
-        console.log('http://192.168.25.83:5000/users/authenticate/' + userid + '/' + Password)
+        console.log('http://192.168.146.83:5000/users/authenticate/' + userid + '/' + password)
 
-        let body = JSON.stringify({
+        let data = JSON.stringify({
             'userid': userid,
-            'password': Password,
-        });
-        console.log(body)
-
-        axios({
-            method: 'get',
-            maxBodyLength: Infinity,
-            url: 'http://192.168.146.83:5000/users/authenticate/',
-            headers: { 
-              'Content-Type': 'application/json'
-            },
-            data : body
-        }).then(
-            (res)=>{
-                console.log(res['data'])
+            'password': password,
+          });
+          console.log(data)
+          if (!userid || !password ) {
+            setError("All fields are required");
+          } else {
+            axios({
+                method: 'post',
+                maxBodyLength: Infinity,
+                url: 'http://192.168.146.83:5000/users/authenticate',
+                headers: { 
+                  'Content-Type': 'application/json'
+                },
+                data : data
+            }).then (
+              (res)=>{
                 if (res['data']['response'] == "authentication successful"){
-                    navigation.navigate('Home')
+                  navigation.navigate('Home')
                 }
                 else {
-                    // createTwoButtonAlert()
-                    setError("Invalid Username or Password")
+                  // createTwoButtonAlert()
+                  setError("Invalid Username and password")
                 }
-            },
-            (err) => {
+              },
+              (err) => {
                 console.log(err)
-            }
-        )
+              }
+            )
+          }
     }
     
     return (
@@ -62,8 +64,8 @@ export default function LoginPage() {
                         <View style={styles.content}>
                             <Text style={styles.text}>Username</Text>
                             <TextInput placeholder="Username" style={[styles.textinput, { color: "#00000080" }]}  onChangeText={text => setUserId(text)}/>
-                            <Text style={styles.text}>Password</Text>
-                            <TextInput placeholder="Password" style={[styles.textinput, { color: "#00000080" }]} secureTextEntry={true} onChangeText={text => setPassword(text)}/>
+                            <Text style={styles.text}>password</Text>
+                            <TextInput placeholder="Password" style={[styles.textinput, { color: "#00000080" }]} secureTextEntry={true} onChangeText={text => setpassword(text)}/>
                             <Text style={[{color: "red"} ]}>{error}</Text>
                             <TouchableOpacity onPress={authenticateUser}>
                                 <View style={styles.buttonstyle}>

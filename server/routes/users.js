@@ -11,7 +11,7 @@ router.get('/', function(req, res, next) {
 });
 
 // login route
-router.get('/authenticate/', function(req, res, next) {
+router.post('/authenticate/', function(req, res) {
   var existingUser = req.body
   console.log(req.body)
   sqlQuery = `select * from users where userid = "${existingUser['userid']}"`
@@ -57,7 +57,7 @@ router.get('/authenticate/', function(req, res, next) {
 // registration route
 router.post('/register', function(req, res) {
   var newUser = req.body
-
+  console.log(newUser)
   console.log(req.body['userid'], newUser['password'], newUser['firstname'], newUser['lastname'], req.body)
   sqlFetch = `SELECT USERID FROM USERS WHERE USERID = "${newUser['userid']}"`
   db.query(sqlFetch, function(err, rawData, fields) {
@@ -73,7 +73,7 @@ router.post('/register', function(req, res) {
     }
 
     else {
-      sqlInsert = `INSERT INTO USERS VALUES ('${newUser['userid']}','${newUser['password']}', '${newUser['firstname']}', '${newUser['lastname']}' )`
+      sqlInsert = `INSERT INTO USERS VALUES ('${newUser['userid']}','${newUser['password']}', '${newUser['firstname']}', '${newUser['lastname']}', 'q' )`
       db.query(sqlInsert, function(err, rawData, fields){
         if (err) throw err
 
