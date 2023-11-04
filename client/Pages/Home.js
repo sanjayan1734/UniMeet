@@ -2,7 +2,7 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
-
+// import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const EventListingPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -19,9 +19,20 @@ const EventListingPage = () => {
       url: 'http://192.168.146.83:5000/events/getAllEvents'
     }).then (
       (res)=>{
-        console.log(res)
-        setUpcomingEvents(res['data']['events'])
-        console.log(upcomingEvents)
+        var temp = res['data']['events'].filter(filterevents)
+        //temp = temp.map(mapdate)
+        function filterevents(value, index, array) {
+          const currentDate = new Date()
+          eventDate = new Date(value['event_date'])
+          return eventDate > currentDate
+        }
+        // function mapdate(value, index, array) {
+        //   console.log(value['event_date'])
+        //   //console.log(value['event_date'].toJSON().substring(0,10))
+        //   return value
+        // }
+        setUpcomingEvents(temp)
+
       },
       (err) => {
         console.log(err)
@@ -61,9 +72,9 @@ const EventListingPage = () => {
       )}
       <Text style={styles.eventsHeader}>Upcoming Events</Text>
       {upcomingEvents.map(item => (
-        <View style={styles.eventItem} key={item.event_id} onPress = {() =>navigation.navigate('event', {event_id: 1})}>
+        <View style={styles.eventItem} key={item.event_id} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>
           <Text style={styles.eventName} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_name}</Text>
-          <Text style={styles.eventDetails}>{item.event_date} | {item.event_venue}</Text>
+          <Text style={styles.eventDetails} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_date} | {item.event_venue}</Text>
         </View>
       ))}
       <Text style={styles.eventsHeader}>Ongoing Events</Text>
@@ -82,11 +93,12 @@ const styles = StyleSheet.create({
     backgroundColor: "#FFFFFF",
   },
   navigationBar: {
-    width: '100%',
+    // width: '100%',
     height: 100,
     backgroundColor: "#AA336A",
     flexDirection: "row",
     alignItems: "center",
+    paddingHorizontal: 10,
   },
   menuButton: {
     marginRight: 10,

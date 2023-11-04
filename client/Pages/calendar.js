@@ -71,7 +71,7 @@ const styles = StyleSheet.create({
     backgroundColor: "#AA336A",
     flexDirection: "row",
     alignItems: "center",
-    paddingHorizontal: 20,
+    paddingHorizontal: 10,
   },
   menuButton: {
     marginRight: 10,
