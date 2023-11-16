@@ -21,6 +21,7 @@
     "morgan": "~1.9.1",
     "mysql": "^2.18.1",
     "ngrok": "^5.0.0-beta.2",
-    "nodemon": "^3.0.1"
+    "nodemon": "^3.0.1",
+    "expo-font":"11.6.0"
   }
 }

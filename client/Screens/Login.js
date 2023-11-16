@@ -8,13 +8,13 @@ import { useNavigation } from '@react-navigation/native';
 import SignUpPage from "./SignUp";
 import * as keychain from 'react-native-keychain';
 
-
 export default function LoginPage() {
     const navigation = useNavigation();
     const insets = useSafeAreaInsets();
     var [userid, setUserId] = useState('')
     var [password, setpassword] = useState('')
     const [error, setError] = useState("");
+
 
     const authenticateUser = () => {
         console.log('http://192.168.146.83:5000/users/authenticate/' + userid + '/' + password)
@@ -98,7 +98,6 @@ const styles = StyleSheet.create({
     appName: {
         textAlign: "center",
         color: "#AA336A",
-        fontFamily: 'Cochin',
         fontWeight: "bold",
         fontSize: 64,
         marginTop: 30,

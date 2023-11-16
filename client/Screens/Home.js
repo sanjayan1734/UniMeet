@@ -2,12 +2,17 @@ import React, { useState, useEffect } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "react-native";
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
+import { useFonts } from 'expo-font';
 // import { createDrawerNavigator } from "@react-navigation/drawer";
 
 const EventListingPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
   const navigation = useNavigation();
+
+  const [isLoaded] = useFonts({
+    "Cochin": require("../assets/fonts/cochin.otf")
+  });
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -35,13 +40,13 @@ const EventListingPage = () => {
 
       },
       (err) => {
-        console.log(err)
+          console.log(err)
       }
-    )
-  }
-  useEffect(() => {
-    fetchEvents()
-  }, []);
+      )
+    }
+    useEffect(() => {
+      fetchEvents()
+    }, []);
 
  
 

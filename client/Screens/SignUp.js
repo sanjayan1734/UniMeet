@@ -118,7 +118,6 @@ const styles = StyleSheet.create({
     color: "#ffffff",
     fontWeight: "bold",
     marginBottom: 20,
-    fontFamily: "Cochin",
     textAlign: "center",
   },
   heading: {
