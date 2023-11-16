@@ -1,8 +1,10 @@
 import { StatusBar } from 'expo-status-bar';
-import { StyleSheet, Text, View, Button } from 'react-native';
+import { StyleSheet, Alert} from 'react-native';
+import { useState, useEffect, useCallback } from 'react';
 import { SafeAreaProvider, useSafeAreaInsets } from 'react-native-safe-area-context'
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import * as SplashScreen from 'expo-splash-screen';
 import { useFonts } from 'expo-font';
 import { createDrawerNavigator } from '@react-navigation/drawer';
 
@@ -17,20 +19,53 @@ const stack = createNativeStackNavigator();
 const drawer = createDrawerNavigator();
 
 export default function App() {
+  const [appIsReady, setAppIsReady] = useState(false);
+
   const [isLoaded] = useFonts({
     "Cochin": require("./assets/fonts/cochin.otf")
   });
+
+  useEffect(() => {
+    async function prepare() {
+      try {
+
+        setTimeout(() => {
+          return null
+        }, 5000);
+
+        await new Promise(resolve => setTimeout(resolve, 2000));
+      } catch (e) {
+        console.warn(e);
+      } finally {
+        // Tell the application to render
+        setAppIsReady(true);
+      }
+    }
+
+    prepare();
+  }, []);
+
+  const onLayoutRootView = useCallback(async () => {
+    if (appIsReady) {
+      // This tells the splash screen to hide immediately! If we call this after
+      // `setAppIsReady`, then we may see a blank screen while the app is
+      // loading its initial state and rendering its first pixels. So instead,
+      // we hide the splash screen once we know the root view has already
+      // performed layout.
+      await SplashScreen.hideAsync();
+    }
+  }, [appIsReady]);
+
+  if (!appIsReady) {
+    return null;
+  }
 
   if (!isLoaded) {
     return null;
   }
   return (
-    <SafeAreaProvider>
+    <SafeAreaProvider onLayout={onLayoutRootView}>
       <NavigationContainer>
-        <drawer.Navigator>
-          <drawer.Screen name="Home" component={EventListingPage} />
-          {/* <Drawer.Screen name="Notifications" component={NotificationsScreen} /> */}
-        </drawer.Navigator>
         <stack.Navigator initialRouteName = "login" screenOptions={{headerShown: false}}  >
           <stack.Screen name="Login" component={LoginPage} />
           <stack.Screen name="SignUp" component={SignUpPage} />

@@ -1,5 +1,5 @@
 import axios from "axios";
-import React, { useState } from "react";
+import React, { useEffect, useState, useCallback } from "react";
 import { View, Text, StatusBar, TouchableOpacity, StyleSheet, TextInput, Image, Alert, ScrollView } from "react-native";
 import { SafeAreaProvider, useSafeAreaInsets } from "react-native-safe-area-context";
 import { NavigationContainer } from '@react-navigation/native';
@@ -7,6 +7,7 @@ import { createNativeStackNavigator } from '@react-navigation/native-stack';
 import { useNavigation } from '@react-navigation/native';
 import SignUpPage from "./SignUp";
 import * as keychain from 'react-native-keychain';
+import * as splashScreen from "expo-splash-screen"
 
 export default function LoginPage() {
     const navigation = useNavigation();
@@ -14,6 +15,8 @@ export default function LoginPage() {
     var [userid, setUserId] = useState('')
     var [password, setpassword] = useState('')
     const [error, setError] = useState("");
+
+
 
 
     const authenticateUser = () => {
