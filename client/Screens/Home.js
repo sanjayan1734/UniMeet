@@ -4,6 +4,7 @@ import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import { useFonts } from 'expo-font';
 // import { createDrawerNavigator } from "@react-navigation/drawer";
+import BottomBar from "./BottomBar";
 
 const EventListingPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -21,7 +22,7 @@ const EventListingPage = () => {
     axios({
       method: 'get',
       maxBodyLength: Infinity,
-      url: 'http://192.168.146.83:5000/events/getAllEvents'
+      url: 'http://172.20.10.2:5000/events/getAllEvents'
     }).then (
       (res)=>{
         var temp = res['data']['events'].filter(filterevents)
@@ -56,8 +57,8 @@ const EventListingPage = () => {
   ];
 
   return (
-    <ScrollView contentContainerStyle={styles.container}>
-      <View style={styles.navigationBar}>
+    <>
+    <View style={styles.navigationBar}>
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Text style={styles.menuButtonText}>&#8801;</Text>
         </TouchableOpacity>
@@ -75,6 +76,8 @@ const EventListingPage = () => {
           <Text style={styles.menuItem} onPress={()=>navigation.navigate('calendar')}>Calendar</Text>
         </View>
       )}
+    <ScrollView contentContainerStyle={styles.container}>
+      
       <Text style={styles.eventsHeader}>Upcoming Events</Text>
       {upcomingEvents.map(item => (
         <View style={styles.eventItem} key={item.event_id} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>
@@ -90,6 +93,8 @@ const EventListingPage = () => {
         </View>
       ))}
     </ScrollView>
+    <BottomBar />
+    </>
   );
 };
 

@@ -14,6 +14,8 @@ import EventListingPage from './Screens/Home';
 import CalendarPage from './Screens/calendar';
 import EventPage from './Screens/event';
 import AdminMain from './Screens/adminMain';
+import BottomBar from './Screens/BottomBar';
+
 
 const stack = createNativeStackNavigator();
 const drawer = createDrawerNavigator();
@@ -47,11 +49,6 @@ export default function App() {
 
   const onLayoutRootView = useCallback(async () => {
     if (appIsReady) {
-      // This tells the splash screen to hide immediately! If we call this after
-      // `setAppIsReady`, then we may see a blank screen while the app is
-      // loading its initial state and rendering its first pixels. So instead,
-      // we hide the splash screen once we know the root view has already
-      // performed layout.
       await SplashScreen.hideAsync();
     }
   }, [appIsReady]);
@@ -66,7 +63,7 @@ export default function App() {
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <NavigationContainer>
-        <stack.Navigator initialRouteName = "login" screenOptions={{headerShown: false}}  >
+        <stack.Navigator initialRouteName = "Login" screenOptions={{headerShown: false}}  >
           <stack.Screen name="Login" component={LoginPage} />
           <stack.Screen name="SignUp" component={SignUpPage} />
           <stack.Screen name="Home" component={EventListingPage} />
@@ -75,6 +72,7 @@ export default function App() {
           <stack.Screen name = 'admin' component={AdminMain} />
         </stack.Navigator>
       </NavigationContainer>
+      {/* <BottomBar /> */}
     </SafeAreaProvider>
   );
 }

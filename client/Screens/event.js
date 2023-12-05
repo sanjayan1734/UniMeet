@@ -5,6 +5,8 @@ import axios from "axios";
 import { PushNotification } from "react-native";
 
 
+import BottomBar from "./BottomBar";
+
 
 const EventPage = ({route}) => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -28,7 +30,7 @@ const EventPage = ({route}) => {
     axios({
       method: 'get',
       maxBodyLength: Infinity,
-      url: 'http://192.168.146.83:5000/events/getEventById',
+      url: 'http://172.20.10.2:5000/events/getEventById',
       params: {event_id: eventId}
     }).then (
       (res)=>{
@@ -48,6 +50,7 @@ const EventPage = ({route}) => {
   }, []);
 
   return (
+    <View>
     <ScrollView contentContainerStyle={styles.container} >
       <View style={styles.navigationBar}>
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
@@ -115,6 +118,8 @@ const EventPage = ({route}) => {
       )}
 
     </ScrollView>
+    <BottomBar />
+    </View>
   );
 };
 

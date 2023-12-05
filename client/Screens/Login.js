@@ -20,7 +20,7 @@ export default function LoginPage() {
 
 
     const authenticateUser = () => {
-        console.log('http://192.168.146.83:5000/users/authenticate/' + userid + '/' + password)
+        console.log('http://172.20.10.2:5000/users/authenticate/' + userid + '/' + password)
 
         let data = JSON.stringify({
             'userid': userid,
@@ -33,7 +33,7 @@ export default function LoginPage() {
             axios({
                 method: 'post',
                 maxBodyLength: Infinity,
-                url: 'http://192.168.146.83:5000/users/authenticate',
+                url: 'http://172.20.10.2:5000/users/authenticate',
                 headers: { 
                   'Content-Type': 'application/json'
                 },
