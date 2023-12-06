@@ -15,6 +15,7 @@ import CalendarPage from './Screens/calendar';
 import EventPage from './Screens/event';
 import AdminMain from './Screens/adminMain';
 import BottomBar from './Screens/BottomBar';
+import RegisteredEvents from './Screens/RegisteredEvents';
 
 
 const stack = createNativeStackNavigator();
@@ -63,13 +64,14 @@ export default function App() {
   return (
     <SafeAreaProvider onLayout={onLayoutRootView}>
       <NavigationContainer>
-        <stack.Navigator initialRouteName = "Login" screenOptions={{headerShown: false}}  >
+        <stack.Navigator initialRouteName = "registeredEvents" screenOptions={{headerShown: false}}  >
           <stack.Screen name="Login" component={LoginPage} />
           <stack.Screen name="SignUp" component={SignUpPage} />
           <stack.Screen name="Home" component={EventListingPage} />
           <stack.Screen name = "calendar" component={CalendarPage}/>
           <stack.Screen name = "event" component={EventPage} />
           <stack.Screen name = 'admin' component={AdminMain} />
+          <stack.Screen name = 'registeredEvents' component={RegisteredEvents} />
         </stack.Navigator>
       </NavigationContainer>
       {/* <BottomBar /> */}
