@@ -5,9 +5,6 @@ import axios from "axios";
 import { PushNotification } from "react-native";
 
 
-import BottomBar from "./BottomBar";
-
-
 const EventPage = ({route}) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [eventDetails, setEventDetails] = useState([]);
@@ -118,7 +115,6 @@ const EventPage = ({route}) => {
       )}
 
     </ScrollView>
-    <BottomBar />
     </View>
   );
 };

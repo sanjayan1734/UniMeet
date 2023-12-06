@@ -3,12 +3,14 @@ import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "
 import { useNavigation } from '@react-navigation/native';
 import axios from "axios";
 import { useFonts } from 'expo-font';
+import { Icon } from 'react-native-paper';
 // import { createDrawerNavigator } from "@react-navigation/drawer";
-import BottomBar from "./BottomBar";
+// import BottomBar from "./BottomBar";
 
 const EventListingPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [upcomingEvents, setUpcomingEvents] = useState([]);
+  const [completedEvents, setCompletedEvents] = useState([]);
   const navigation = useNavigation();
 
   const [isLoaded] = useFonts({
@@ -25,19 +27,33 @@ const EventListingPage = () => {
       url: 'http://172.20.10.2:5000/events/getAllEvents'
     }).then (
       (res)=>{
-        var temp = res['data']['events'].filter(filterevents)
-        //temp = temp.map(mapdate)
-        function filterevents(value, index, array) {
+        
+        function filteronGoingEvents(value, index, array) {
           const currentDate = new Date()
           eventDate = new Date(value['event_date'])
-          return eventDate > currentDate
+          if (eventDate >= currentDate) {
+            return value
+          }
+          
         }
-        // function mapdate(value, index, array) {
-        //   console.log(value['event_date'])
-        //   //console.log(value['event_date'].toJSON().substring(0,10))
-        //   return value
-        // }
+        function filterCompletedEvents(value, index, array) {
+          const currentDate = new Date()
+          eventDate = new Date(value['event_date'])
+          if (eventDate < currentDate) {
+          return value
+          }
+        }
+        function mapdate(value, index, array) {
+          value['event_date'] = value['event_date'].substring(0,10)
+          return value
+        }
+        var temp = res['data']['events'].filter(filteronGoingEvents)
+        temp = temp.map(mapdate)
         setUpcomingEvents(temp)
+        temp = res['data']['events'].filter(filterCompletedEvents)
+        temp.map(mapdate)
+        setCompletedEvents(temp)
+
 
       },
       (err) => {
@@ -62,10 +78,10 @@ const EventListingPage = () => {
         <TouchableOpacity onPress={toggleMenu} style={styles.menuButton}>
           <Text style={styles.menuButtonText}>&#8801;</Text>
         </TouchableOpacity>
-        <Text style={styles.appName}>UniMeet</Text>
+        <Text style={styles.appName} onPress={toggleMenu}>UniMeet</Text>
         <View style={styles.spacer} />
-        <View style={styles.loginIcon}>
-          <Text style={styles.profileInitial}>Q</Text>
+        <View style = {styles.loginIcon}>
+          <Text style={styles.profileInitial}><Icon source={"account"} color="white" size={35}/></Text>
         </View>
       </View>
       {menuVisible && (
@@ -85,15 +101,15 @@ const EventListingPage = () => {
           <Text style={styles.eventDetails} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_date} | {item.event_venue}</Text>
         </View>
       ))}
-      <Text style={styles.eventsHeader}>Ongoing Events</Text>
-      {ongoingEvents.map(item => (
-        <View style={styles.eventItem} key={item.id}>
-          <Text style={styles.eventName}>{item.name}</Text>
-          <Text style={styles.eventDetails}>{item.date} | {item.location}</Text>
-        </View>
+      <Text style={styles.eventsHeader}>Completed Events</Text>
+      {completedEvents.map(item => (
+        <View style={styles.eventItem} key={item.event_id} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>
+        <Text style={styles.eventName} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_name}</Text>
+        <Text style={styles.eventDetails} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_date} | {item.event_venue}</Text>
+      </View>
       ))}
     </ScrollView>
-    <BottomBar />
+    {/* <BottomBar /> */}
     </>
   );
 };
@@ -104,11 +120,12 @@ const styles = StyleSheet.create({
   },
   navigationBar: {
     // width: '100%',
-    height: 100,
+    height: '13%',
     backgroundColor: "#AA336A",
     flexDirection: "row",
     alignItems: "center",
     paddingHorizontal: 10,
+    verticalAlign: "center"
   },
   menuButton: {
     marginRight: 10,
@@ -129,17 +146,12 @@ const styles = StyleSheet.create({
     flex: 1,
   },
   loginIcon: {
-    width: 50,
-    height: 50,
-    backgroundColor: "#FFFFFF",
+    // width: 50,
+    // height: 50,
+    backgroundColor: "#AA336A",
     borderRadius: 25,
     justifyContent: "center",
     alignItems: "center",
-  },
-  profileInitial: {
-    fontSize: 20,
-    fontWeight: "bold",
-    color: "#AA336A",
   },
   menu: {
     backgroundColor: "#AA336A",

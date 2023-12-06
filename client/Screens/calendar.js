@@ -1,6 +1,8 @@
 import React, { useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "react-native";
 import { Calendar } from 'react-native-calendars';
+import { Icon } from 'react-native-paper';
+import { useNavigation } from '@react-navigation/native';
 
 const CalendarPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
@@ -18,15 +20,15 @@ const CalendarPage = () => {
         </TouchableOpacity>
         <Text style={styles.appName}>UniMeet</Text>
         <View style={styles.spacer} />
-        <View style={styles.loginIcon}>
-          <Text style={styles.profileInitial}>P</Text>
+        <View>
+          <Text style={styles.profileInitial}><Icon source={"account"} color="white" size={35}/></Text>
         </View>
       </View>
       {menuVisible && (
         <View style={styles.menu}>
+          <Text style={styles.menuItem} onPress={navigation.navigate('Home')}>Home</Text>
           <Text style={styles.menuItem}>Registered Events</Text>
           <Text style={styles.menuItem}>Notifications</Text>
-          <Text style={styles.menuItem}>Calendar</Text>
         </View>
       )}
       <View style={styles.content}>
@@ -75,14 +77,16 @@ const styles = StyleSheet.create({
   },
   menuButton: {
     marginRight: 10,
-    fontSize: 24,
+    fontSize: 40,
     color: "#FFFFFF",
+    marginLeft: 30
   },
   menuButtonText: {
-    fontSize: 24,
+    fontSize: 40,
     fontWeight: "bold",
     color: "#FFFFFF",
   },
+
   appName: {
     fontSize: 24,
     fontWeight: "bold",
@@ -101,7 +105,7 @@ const styles = StyleSheet.create({
     alignItems: "center",
   },
   profileInitial: {
-    fontSize: 20,
+    fontSize: 15,
     fontWeight: "bold",
     color: "#AA336A",
   },
