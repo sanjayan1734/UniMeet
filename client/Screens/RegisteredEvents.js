@@ -1,16 +1,50 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "react-native";
+import axios from "axios";
+import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
-const RegisteredEvents = () => {
+const RegisteredEvents = (parameters) =>
+{
   const [menuVisible, setMenuVisible] = useState(false);
+  const [registeredEvents, setRegisteredEvents] = useState([]);
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
   const getRegisteredEvents = () => {
-    
+    console.log(parameters.route.params.user_id)
+    const user_id = parameters.route.params.user_id
+    // Implement logic to get all events registered by the user with the provided user_id
+    // console.log("Getting events registered by user with ID:", user_id);
+    axios({
+      method: 'get',
+      maxBodyLength: Infinity,
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      url: 'http://172.20.10.2:5000/events/registeredEvents',
+      params: {user_id: user_id}
+    }).then (
+      (res)=>{
+        console.log(res['data'])
+        if (res['data']['response'] == "events fetched successfully"){ 
+          setRegisteredEvents(res['data']['events'])
+          console.log(res['data']['response'])
+        }
+      },
+      (err)=> {
+        console.error(err)
+      }      
+    )
   }
+
+  useEffect(() => {
+    // console.log(user_id)
+     getRegisteredEvents()
+      console.log(registeredEvents)
+  }, []);
 
   const upcomingEvents = [
     { id: "1", name: "Conference 2023", date: "September 20, 2023", location: "Amriteshwari Hall" },
@@ -42,10 +76,10 @@ const RegisteredEvents = () => {
         </View>
       )}
       <Text style={styles.eventsHeader}>Registered Events</Text> 
-      {upcomingEvents.map(item => (
-        <View style={styles.eventItem} key={item.id}>
-          <Text style={styles.eventName}>{item.name}</Text>
-          <Text style={styles.eventDetails}>{item.date} | {item.location}</Text>
+      {registeredEvents.map(item => (
+        <View style={styles.eventItem} key={item.event_id}>
+          <Text style={styles.eventName}>{item.event_name}</Text>
+          {/* <Text style={styles.eventDetails}>{item.event_id}</Text> */}
         </View>
       ))}
       
@@ -134,4 +168,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default RegisteredEvents;
+export default RegisteredEvents
