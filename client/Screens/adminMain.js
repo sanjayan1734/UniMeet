@@ -1,15 +1,43 @@
-import React, { useState } from "react";
+import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, TouchableWithoutFeedback } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; // Import the AntDesign icon set from Expo
 import axios from "axios";
 
 const AdminMain = () => {
   const [menuVisible, setMenuVisible] = useState(false);
+  const [allEvents, setAllEvents] = useState([]); // Add a new state variable to store all events
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
 
+  const getAllEvents = () => {
+    // Implement logic to get all events
+    console.log("Getting all events");
+    axios({
+      method: 'get',
+      maxBodyLength: Infinity,
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      url: 'http://172.20.10.2:5000/events/getAllEvents',
+    }).then (
+      (res)=>{
+        console.log(res['data'])
+        if (res['data']['response'] == "events fetched successfully"){ 
+          setAllEvents(res['data']['events'])
+          console.log(res['data']['events'])
+        }
+      },
+      (err)=> {
+        console.error(err)
+      }      
+    )
+  }
+
+  useEffect(() => {
+    getAllEvents();
+  }, []);
   const upcomingEvents = [
     { id: "1", name: "Conference 2023", date: "September 20, 2023", location: "Amriteshwari Hall" },
     { id: "2", name: "Seminar Series", date: "October 5, 2023", location: "Pandhal" },
@@ -21,6 +49,26 @@ const AdminMain = () => {
   const handleDeleteEvent = (eventId) => {
     // Implement logic to delete the event with the provided eventId
     console.log("Deleting event with ID:", eventId);
+    axios({
+      method: 'get',
+      maxBodyLength: Infinity,
+      headers: { 
+        'Content-Type': 'application/json'
+      },
+      url: 'http://172.20.10.2:5000/events/deleteEventById',
+      params: {event_id: eventId}
+    }).then (
+      (res)=>{
+        console.log(res['data'])
+        if (res['data']['response'] == "event deleted successfully"){ 
+          getAllEvents()
+          console.log(res['data']['response'])
+        }
+      },
+      (err)=> {
+        console.error(err)
+      }      
+    )
   };
 
   return (
@@ -43,13 +91,13 @@ const AdminMain = () => {
         </View>
       )}
       <Text style={styles.eventsHeader}>All Events</Text>
-      {upcomingEvents.map((item) => (
-        <View style={styles.eventItem} key={item.id}>
+      {allEvents.map((item) => (
+        <View style={styles.eventItem} key={item.event_id}>
           <View style={styles.eventDetailsContainer}>
-            <Text style={styles.eventName}>{item.name}</Text>
-            <Text style={styles.eventDetails}>{item.date} | {item.location}</Text>
+            <Text style={styles.eventName}>{item.event_name}</Text>
+            <Text style={styles.eventDetails}>{item.event_date} | {item.event_venue}</Text>
           </View>
-          <TouchableWithoutFeedback onPress={() => handleDeleteEvent(item.id)}>
+          <TouchableWithoutFeedback onPress={() => handleDeleteEvent(item.event_id)}>
             <View style={styles.deleteIconContainer}>
               <AntDesign name="delete" size={24} color="#FF0000" />
             </View>

@@ -100,4 +100,19 @@ router.post('/addEvent', function(req, res, next) {
 })
 })
 
+router.get('/deleteEventById', function(req, res, next) {
+
+    sql = "delete from events where event_id = " + req.query.event_id
+    db.query(sql, [req.query.event_id], function(err, rawData, fields) {
+        if (err) throw err;
+        var data = JSON.parse(JSON.stringify(rawData))
+        console.log(data)
+        res.json({
+            status:200,
+            response:"event deleted successfully",
+            event:data     
+        })
+    })
+})
+
 module.exports = router;
