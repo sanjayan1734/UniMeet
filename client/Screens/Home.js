@@ -81,14 +81,15 @@ const EventListingPage = () => {
         <Text style={styles.appName} onPress={toggleMenu}>UniMeet</Text>
         <View style={styles.spacer} />
         <View style = {styles.loginIcon}>
-          <Text style={styles.profileInitial}><Icon source={"account"} color="white" size={35}/></Text>
+          <Text style={styles.profileInitial}>Q</Text>
+          {/* <Icon source={"account"} color="white" size={35}/> */}
         </View>
       </View>
       {menuVisible && (
         <View style={styles.menu}>
           <Text style={styles.menuItem} onPress={()=>navigation.navigate('Home')}>Home</Text>
-          <Text style={styles.menuItem}>Registered Events</Text>
-          <Text style={styles.menuItem}>Notifications</Text>
+          <Text style={styles.menuItem} onPress={() => navigation.navigate('registeredEvents', user_id = 'Q')}>Registered Events</Text>
+          {/* <Text style={styles.menuItem}>Notifications</Text> */}
           <Text style={styles.menuItem} onPress={()=>navigation.navigate('calendar')}>Calendar</Text>
         </View>
       )}
@@ -96,7 +97,7 @@ const EventListingPage = () => {
       
       <Text style={styles.eventsHeader}>Upcoming Events</Text>
       {upcomingEvents.map(item => (
-        <View style={styles.eventItem} key={item.event_id} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>
+        <View style={styles.eventItem} key={item.event_id} onPress = {() =>navigation.navigate('event', {event_id: item.event_id, user_id: 'Q'})}>
           <Text style={styles.eventName} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_name}</Text>
           <Text style={styles.eventDetails} onPress = {() =>navigation.navigate('event', {event_id: item.event_id})}>{item.event_date} | {item.event_venue}</Text>
         </View>
@@ -144,6 +145,10 @@ const styles = StyleSheet.create({
   },
   spacer: {
     flex: 1,
+  },
+  profileInitial: {
+    color: '#FFFFFF',
+    fontSize: 30
   },
   loginIcon: {
     // width: 50,

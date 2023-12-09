@@ -2,11 +2,13 @@ import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform, TouchableWithoutFeedback } from "react-native";
 import { AntDesign } from "@expo/vector-icons"; // Import the AntDesign icon set from Expo
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
+
 
 const AdminMain = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [allEvents, setAllEvents] = useState([]); // Add a new state variable to store all events
-
+  const navigation = useNavigation();
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
@@ -85,9 +87,9 @@ const AdminMain = () => {
       </View>
       {menuVisible && (
         <View style={styles.menu}>
-          <Text style={styles.menuItem}>New Event</Text>
+          <Text style={styles.menuItem} onPress={() => {navigation.navigate('CreateEvent')}}>New Event</Text>
           <Text style={styles.menuItem}>Delete Event</Text>
-          <Text style={styles.menuItem}>Calendar</Text>
+          <Text style={styles.menuItem} onPress = {() => {navigation.navigate('calendar')}} >Calendar</Text>
         </View>
       )}
       <Text style={styles.eventsHeader}>All Events</Text>
@@ -99,7 +101,8 @@ const AdminMain = () => {
           </View>
           <TouchableWithoutFeedback onPress={() => handleDeleteEvent(item.event_id)}>
             <View style={styles.deleteIconContainer}>
-              <AntDesign name="delete" size={24} color="#FF0000" />
+              <Text > Delete </Text>
+              {/* <AntDesign name="delete" size={24} color="#FF0000" /> */}
             </View>
           </TouchableWithoutFeedback>
         </View>

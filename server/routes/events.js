@@ -52,7 +52,8 @@ router.get('/deleteEventById', function(req, res, next) {
 router.post('/registerEvent', function(req, res, next) {
 
     //need to check for duplicate registrations
-    sql = "insert into registrations (event_id, user_id, event_name) values (" + req.query.event_id + "," + " \" " + req.query.user_id + "\" " + "," + "\"" + req.query.event_name + " \");"
+    // console.log(req)
+    sql = "insert into registrations (event_id, user_id, event_name) values (" + req.query.event_id + "," + " \"" + req.query.user_id + "\" " + "," + "\"" + req.query.event_name + " \");"
     console.log(sql)
     db.query(sql, [req.query.event_id, req.query.user_id], function(err, rawData, fields) {
         if (err) throw err;
@@ -86,9 +87,10 @@ router.get('/registeredEvents', function(req, res, next) {
 
 router.post('/addEvent', function(req, res, next) {
 
-    //need to check for duplicate events
-    sql = "insert into events (event_name, event_date, event_venue, event_description, chief guest) values (\"" + req.query.name + "\",\"" + req.query.date + "\",\"" + req.query.location + "\",\"" + req.query.description + "\",\"" + req.query.chief_guest + "\");"
-    db.query(sql, [req.query.name, req.query.date, req.query.location, req.query.description, req.query.chief_guest], function(err, rawData, fields) {
+    //need to check for duplicate 
+    console.log(req.body.name, req.body.date, req.body.location, req.body.description, req.body.chief_guest)
+    sql = "insert into events (event_name, event_date, event_venue, event_description, chief_guest) values (\"" + req.body.name + "\",\"" + req.body.date + "\",\"" + req.body.location + "\",\"" + req.body.description + "\",\"" + req.body.chief_guest + "\");"
+    db.query(sql, [req.body.name, req.body.date, req.body.location, req.body.description, req.body.chief_guest], function(err, rawData, fields) {
         if (err) throw err;
         var data = JSON.parse(JSON.stringify(rawData))
         console.log(data)

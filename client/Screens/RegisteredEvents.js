@@ -1,6 +1,7 @@
 import React, { useEffect, useState } from "react";
 import { View, Text, StyleSheet, TouchableOpacity, ScrollView, Platform } from "react-native";
 import axios from "axios";
+import { useNavigation } from '@react-navigation/native';
 import { NavigationContainer } from '@react-navigation/native';
 import { createNativeStackNavigator } from '@react-navigation/native-stack';
 
@@ -8,6 +9,7 @@ const RegisteredEvents = (parameters) =>
 {
   const [menuVisible, setMenuVisible] = useState(false);
   const [registeredEvents, setRegisteredEvents] = useState([]);
+  const navigation = useNavigation();
 
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
@@ -70,15 +72,15 @@ const RegisteredEvents = (parameters) =>
       </View>
       {menuVisible && (
         <View style={styles.menu}>
+          <Text style={styles.menuItem} onPress={() => {navigation.navigate('Home')}}>Home</Text>
           <Text style={styles.menuItem}>Registered Events</Text>
-          <Text style={styles.menuItem}>Notifications</Text>
           <Text style={styles.menuItem}>Calendar</Text>
         </View>
       )}
       <Text style={styles.eventsHeader}>Registered Events</Text> 
       {registeredEvents.map(item => (
         <View style={styles.eventItem} key={item.event_id}>
-          <Text style={styles.eventName}>{item.event_name}</Text>
+          <Text style={styles.eventName} onPress = {() =>navigation.navigate('eventDetails', {event_id: item.event_id})}>{item.event_name}</Text>
           {/* <Text style={styles.eventDetails}>{item.event_id}</Text> */}
         </View>
       ))}

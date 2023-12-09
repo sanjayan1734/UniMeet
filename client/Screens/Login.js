@@ -41,7 +41,14 @@ export default function LoginPage() {
             }).then (
               (res)=>{
                 if (res['data']['response'] == "authentication successful"){
-                  navigation.navigate('Home')
+                    console.log(res['data'])
+                    console.log(res['data']['userid'])
+                    if (res['data']['userDetails']['userid'] == "admin@gmail.com") {
+                    navigation.navigate('admin')
+                  }
+                  else{
+                    navigation.navigate('Home')
+                  }
                 }
                 else {
                   // createTwoButtonAlert()

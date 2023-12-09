@@ -5,7 +5,7 @@ import axios from "axios";
 import { PushNotification } from "react-native";
 
 
-const EventPage = ({route}) => {
+const eventDetails = ({route}) => {
   const [menuVisible, setMenuVisible] = useState(false);
   const [eventDetails, setEventDetails] = useState([]);
   const [eventName, setEventName] = useState()
@@ -118,15 +118,6 @@ const EventPage = ({route}) => {
           <Text style={styles.detailText}>
             {eventDetails['event_description']}
           </Text>
-          <TouchableOpacity style={{backgroundColor: registrationStatus? "#33AA73":"#AA336A",
-              paddingVertical: 12,  
-              paddingHorizontal: 24, 
-              borderRadius: 12,      
-              marginTop: 30,       
-              alignItems: "center"
-            }}  onPress={() =>registerEvent()}>
-            <Text style={styles.registerButtonText}>{registrationStatus ? "Registered" : "Register"}</Text>
-          </TouchableOpacity>
         </View>
       </View>) : (
         <Text>Loading event details...</Text>
@@ -254,4 +245,4 @@ const styles = StyleSheet.create({
   },
 });
 
-export default EventPage;
+export default eventDetails;

@@ -7,7 +7,7 @@ import { useNavigation } from '@react-navigation/native';
 const CalendarPage = () => {
   const [menuVisible, setMenuVisible] = useState(false);
   const currentDate = new Date(); // Get the current date
-
+  const navigation = useNavigation();
   const toggleMenu = () => {
     setMenuVisible(!menuVisible);
   };
